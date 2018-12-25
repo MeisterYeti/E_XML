@@ -300,7 +300,7 @@ static std::string getData(BufferedStreamReader & in) {
 
 	in.get(buffer, '<');
 	if(!in.good()){
-		WARN(" ");
+		//WARN("X");
 	}
 	return buffer.str();
 }
@@ -348,6 +348,10 @@ void traverse(std::istream & in,
 					break;
 				}
 				tags.pop();
+				
+				const std::string data = EScript::StringUtils::trim(getData(is));
+				if(!data.empty() && !dataFun(tags.top().name, data))
+					finished = true;
 				break;
 			}
 			case Tag::TAG_TYPE_EMPTY:{

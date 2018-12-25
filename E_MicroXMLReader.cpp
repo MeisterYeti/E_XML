@@ -59,13 +59,13 @@ static bool visitorEnter(EScript::Runtime & rt, E_MicroXMLReader & reader, const
 
 static bool visitorLeave(EScript::Runtime & rt, E_MicroXMLReader & reader, const std::string & tagName) {
 	static const EScript::StringId attrName("leave");
-	ObjRef resultObj = callMemberFunction(rt, &reader, attrName, ParameterValues(visitorCreateETag((tagName))));
+	ObjRef resultObj = callMemberFunction(rt, &reader, attrName, ParameterValues(String::create((tagName))));
 	return resultObj.toBool();
 }
 
 static bool visitorData(EScript::Runtime & rt, E_MicroXMLReader & reader, const std::string & tagName, const std::string & data) {
 	static const EScript::StringId attrName("data");
-	ObjRef resultObj = callMemberFunction(rt, &reader, attrName, ParameterValues(visitorCreateETag(tagName), String::create(data)));
+	ObjRef resultObj = callMemberFunction(rt, &reader, attrName, ParameterValues(String::create(tagName), String::create(data)));
 	return resultObj.toBool();
 }
 
@@ -100,6 +100,7 @@ E_MicroXMLReader::~E_MicroXMLReader() = default;
 
 //! [E_MicroXMLReader] initMembers
 void init(EScript::Namespace* lib) {
+	std::cout << "Loading library XML..." << std::endl;
 	if(lib->getAttribute("XML").isNotNull()) {
 		std::cerr << "XML Library already loaded!" << std::endl;
 		return;
@@ -113,13 +114,13 @@ void init(EScript::Namespace* lib) {
 	//! [ESF] MicroXMLReader new Util.MicroXMLReader()
 	ES_CTOR(typeObject,0,0,new E_MicroXMLReader())
 
-	//! [ESMF] bool Util.MicroXMLReader.data(tag,data)
+	//! [ESMF] bool Util.MicroXMLReader.data(tagname,data)
 	ES_FUN(typeObject,"data",2,2,true)
 
 	//! [ESMF] bool Util.MicroXMLReader.enter(tag)
 	ES_FUN(typeObject,"enter",1,1,true)
 
-	//! [ESMF] bool Util.MicroXMLReader.leave(tag)
+	//! [ESMF] bool Util.MicroXMLReader.leave(tagname)
 	ES_FUN(typeObject,"leave",1,1,true)
 
 	//! [ESMF] bool  Util.MicroXMLReader.parse(Filename)
