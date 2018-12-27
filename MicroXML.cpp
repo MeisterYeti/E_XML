@@ -360,7 +360,11 @@ void traverse(std::istream & in,
 					break;
 				}
 				if(!leaveFun(tag.name))
-					finished = true;					
+					finished = true;
+				
+				const std::string data = EScript::StringUtils::trim(getData(is));
+				if(!data.empty() && !dataFun(tags.top().name, data))
+					finished = true;
 				break;
 			}
 			case Tag::TAG_TYPE_DATA:{
