@@ -3,7 +3,7 @@
 	Copyright (C) 2009-2012 Benjamin Eikel <benjamin@eikel.org>
 	Copyright (C) 2009-2012 Claudius Jähn <claudius@uni-paderborn.de>
 	Copyright (C) 2009-2012 Ralf Petring <ralf@petring.net>
-	Copyright (C) 2018 Sascha Brandt <sascha@brandt.graphics>
+	Copyright (C) 2018-2019 Sascha Brandt <sascha@brandt.graphics>
 	
 	This library is subject to the terms of the Mozilla Public License, v. 2.0.
 	You should have received a copy of the MPL along with this library; see the 
@@ -100,9 +100,9 @@ E_MicroXMLReader::~E_MicroXMLReader() = default;
 
 //! [E_MicroXMLReader] initMembers
 void init(EScript::Namespace* lib) {
-	std::cout << "Loading library XML..." << std::endl;
+	//std::cout << "Loading library XML..." << std::endl;
 	if(lib->getAttribute("XML").isNotNull()) {
-		std::cerr << "XML Library already loaded!" << std::endl;
+		//std::cerr << "XML Library already loaded!" << std::endl;
 		return;
 	}
 	auto * ns = new EScript::Namespace;
@@ -111,22 +111,25 @@ void init(EScript::Namespace* lib) {
 	EScript::Type * typeObject = E_MicroXMLReader::getTypeObject();
 	declareConstant(ns,E_MicroXMLReader::getClassName(),typeObject);
 
-	//! [ESF] MicroXMLReader new Util.MicroXMLReader()
+	//! [ESF] MicroXMLReader new XML.MicroXMLReader()
 	ES_CTOR(typeObject,0,0,new E_MicroXMLReader())
 
-	//! [ESMF] bool Util.MicroXMLReader.data(tagname,data)
+	//! [ESMF] bool XML.MicroXMLReader.data(tagname,data)
 	ES_FUN(typeObject,"data",2,2,true)
 
-	//! [ESMF] bool Util.MicroXMLReader.enter(tag)
+	//! [ESMF] bool XML.MicroXMLReader.enter(tag)
 	ES_FUN(typeObject,"enter",1,1,true)
 
-	//! [ESMF] bool Util.MicroXMLReader.leave(tagname)
+	//! [ESMF] bool XML.MicroXMLReader.leave(tagname)
 	ES_FUN(typeObject,"leave",1,1,true)
 
-	//! [ESMF] bool  Util.MicroXMLReader.parse(Filename)
+	//! [ESMF] bool  XML.MicroXMLReader.parse(Filename)
 	ES_MFUN(typeObject,E_MicroXMLReader,"parse",1,1,
 			visitorParse(rt, *thisObj, parameter[0].toString()))
 
+	//! [ESF] String XML.replace(String in, String regex, String repl)
+	ES_FUN(ns,"replace",3,3,
+			replace(parameter[0].toString(), parameter[1].toString(), parameter[2].toString()))
 }
 
 }

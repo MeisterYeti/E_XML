@@ -3,7 +3,7 @@
 	Copyright (C) 2007-2012 Benjamin Eikel <benjamin@eikel.org>
 	Copyright (C) 2007-2012 Claudius Jähn <claudius@uni-paderborn.de>
 	Copyright (C) 2007-2012 Ralf Petring <ralf@petring.net>
-	Copyright (C) 2018 Sascha Brandt <sascha@brandt.graphics>
+	Copyright (C) 2018-2019 Sascha Brandt <sascha@brandt.graphics>
 	
 	This library is subject to the terms of the Mozilla Public License, v. 2.0.
 	You should have received a copy of the MPL along with this library; see the
@@ -19,6 +19,7 @@
 #include <sstream>
 #include <utility>
 #include <stack>
+#include <regex>
 
 #define FAIL() throw std::runtime_error("Runtime error.");
 #define WARN(msg) std::cerr << msg << std::endl;
@@ -382,5 +383,10 @@ void traverse(std::istream & in,
 
 // -------------------------------------------------------------------------------------------------------------
 
+std::string replace(const std::string& input, const std::string& regex, const std::string& repl) {
+	return std::regex_replace(input, std::regex(regex), repl);
+}
+
+// -------------------------------------------------------------------------------------------------------------
 }
 
