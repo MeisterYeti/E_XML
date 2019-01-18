@@ -131,12 +131,16 @@ void init(EScript::Namespace* lib) {
 	ES_FUN(ns,"replace",3,4,
 			replace(parameter[0].toString(), parameter[1].toString(), parameter[2].toString(), parameter[3].toBool(false)))
 			
-	//! [ESF] Array XML.search(String in, String regex[, Bool extended])
+	//! [ESF] Match XML.search(String in, String regex[, Bool extended])
 	ES_FUNCTION(ns,"search",2,3, {
-		auto matches = search(parameter[0].toString(), parameter[1].toString(), parameter[2].toBool(false));
+		std::vector<std::string> matches;
+		int32_t pos = search(parameter[0].toString(), parameter[1].toString(), matches, parameter[2].toBool(false));
 		if(matches.empty())
 			return Bool::create(false);
-		return Array::create(matches);
+		auto* match = new EScript::ExtObject;
+		match->setAttribute("matches", Array::create(matches));
+		match->setAttribute("start", Number::create(pos));
+		return match;
 	})
 }
 

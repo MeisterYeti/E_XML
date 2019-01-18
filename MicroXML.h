@@ -65,7 +65,7 @@ void traverse(std::istream & in,
 // --------------------
 
 std::string replace(const std::string& input, const std::string& regex, const std::string& repl, bool extended=false);
-std::vector<std::string> search(const std::string& input, const std::string& regex, bool extended=false);
+int32_t search(const std::string& input, const std::string& regex, std::vector<std::string>& matches, bool extended=false);
 
 }
 #endif // MICROXML_H

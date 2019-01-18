@@ -389,13 +389,27 @@ std::string replace(const std::string& input, const std::string& regex, const st
 
 // -------------------------------------------------------------------------------------------------------------
 
-std::vector<std::string> search(const std::string& input, const std::string& regex, bool extended) {
-	std::vector<std::string> matches;
+int utf8_strlen(const std::string& str) {
+	int c,i,ix,q;
+	for (q=0, i=0, ix=str.length(); i < ix; i++, q++)     {
+		c = (unsigned char) str[i];
+		if      (c>=0   && c<=127) i+=0;
+		else if ((c & 0xE0) == 0xC0) i+=1;
+		else if ((c & 0xF0) == 0xE0) i+=2;
+		else if ((c & 0xF8) == 0xF0) i+=3;
+		//else if (($c & 0xFC) == 0xF8) i+=4; // 111110bb //byte 5, unnecessary in 4 byte UTF-8
+		//else if (($c & 0xFE) == 0xFC) i+=5; // 1111110b //byte 6, unnecessary in 4 byte UTF-8
+		else return 0;//invalid utf8
+	}
+	return q;
+}
+
+int32_t search(const std::string& input, const std::string& regex, std::vector<std::string>& matches, bool extended) {
 	std::smatch match;
 	std::regex_search(input, match, extended ? std::regex(regex, std::regex::extended) : std::regex(regex));
 	for(const auto& m : match)
 		matches.emplace_back(m);	
-	return matches;
+	return match.empty() ? -1 : utf8_strlen(match.prefix());
 }
 
 // -------------------------------------------------------------------------------------------------------------
