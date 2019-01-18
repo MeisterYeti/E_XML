@@ -383,8 +383,19 @@ void traverse(std::istream & in,
 
 // -------------------------------------------------------------------------------------------------------------
 
-std::string replace(const std::string& input, const std::string& regex, const std::string& repl) {
-	return std::regex_replace(input, std::regex(regex), repl);
+std::string replace(const std::string& input, const std::string& regex, const std::string& repl, bool extended) {
+	return std::regex_replace(input, extended ? std::regex(regex, std::regex::extended) : std::regex(regex), repl);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+
+std::vector<std::string> search(const std::string& input, const std::string& regex, bool extended) {
+	std::vector<std::string> matches;
+	std::smatch match;
+	std::regex_search(input, match, extended ? std::regex(regex, std::regex::extended) : std::regex(regex));
+	for(const auto& m : match)
+		matches.emplace_back(m);	
+	return matches;
 }
 
 // -------------------------------------------------------------------------------------------------------------

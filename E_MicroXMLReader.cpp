@@ -127,9 +127,17 @@ void init(EScript::Namespace* lib) {
 	ES_MFUN(typeObject,E_MicroXMLReader,"parse",1,1,
 			visitorParse(rt, *thisObj, parameter[0].toString()))
 
-	//! [ESF] String XML.replace(String in, String regex, String repl)
-	ES_FUN(ns,"replace",3,3,
-			replace(parameter[0].toString(), parameter[1].toString(), parameter[2].toString()))
+	//! [ESF] String XML.replace(String in, String regex, String repl[, Bool extended])
+	ES_FUN(ns,"replace",3,4,
+			replace(parameter[0].toString(), parameter[1].toString(), parameter[2].toString(), parameter[3].toBool(false)))
+			
+	//! [ESF] Array XML.search(String in, String regex[, Bool extended])
+	ES_FUNCTION(ns,"search",2,3, {
+		auto matches = search(parameter[0].toString(), parameter[1].toString(), parameter[2].toBool(false));
+		if(matches.empty())
+			return Bool::create(false);
+		return Array::create(matches);
+	})
 }
 
 }

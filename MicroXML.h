@@ -15,6 +15,7 @@
 #include <functional>
 #include <iosfwd>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 /***
@@ -63,7 +64,8 @@ void traverse(std::istream & in,
 
 // --------------------
 
-std::string replace(const std::string& input, const std::string& regex, const std::string& repl);
+std::string replace(const std::string& input, const std::string& regex, const std::string& repl, bool extended=false);
+std::vector<std::string> search(const std::string& input, const std::string& regex, bool extended=false);
 
 }
 #endif // MICROXML_H
