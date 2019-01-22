@@ -135,7 +135,7 @@ void init(EScript::Namespace* lib) {
 	ES_FUNCTION(ns,"search",2,3, {
 		std::vector<std::string> matches;
 		int32_t pos = search(parameter[0].toString(), parameter[1].toString(), matches, parameter[2].toBool(false));
-		if(matches.empty())
+		if(matches.empty() || pos < 0)
 			return Bool::create(false);
 		auto* match = new EScript::ExtObject;
 		match->setAttribute("matches", Array::create(matches));
